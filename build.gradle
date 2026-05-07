@@ -1,51 +1,50 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
-   // ext.kotlin_version = '1.4.30-M1'
-
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-
-        maven {url 'https://developer.huawei.com/repo/'}
-        maven {url 'https://developer.hihonor.com/repo'}
-
-        google()
-        mavenCentral()
+        // 1. 如果在 GitHub Actions 环境，优先使用官方源
+        if (System.getenv("GITHUB_ACTIONS") == "true") {
+            google()
+            mavenCentral()
+            maven { url 'https://developer.huawei.com/repo/' }
+            maven { url 'https://developer.hihonor.com/repo' }
+        } else {
+            // 2. 本地开发使用阿里云镜像加速
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/public' }
+            maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+            maven { url 'https://developer.huawei.com/repo/' }
+            maven { url 'https://developer.hihonor.com/repo' }
+            google()
+            mavenCentral()
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.7.2'
         classpath 'com.huawei.agconnect:agcp:1.9.1.301'
         classpath 'com.hihonor.mcs:asplugin:2.0.1.300'
-        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://jitpack.io' }
-
-        maven { url "https://developer.huawei.com/repo/"}
-        maven { url "https://mvn.getui.com/nexus/content/repositories/releases/" }
-        maven { url 'https://developer.hihonor.com/repo/' }
-
-        google()
-        mavenCentral()
-    }
-    configurations {
-        all {
-            resolutionStrategy {
-                //force "android.arch.lifecycle:runtime:1.1.1"
-            }
+        if (System.getenv("GITHUB_ACTIONS") == "true") {
+            google()
+            mavenCentral()
+            maven { url 'https://jitpack.io' }
+            maven { url "https://developer.huawei.com/repo/" }
+            maven { url "https://mvn.getui.com/nexus/content/repositories/releases/" }
+            maven { url 'https://developer.hihonor.com/repo/' }
+        } else {
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/public' }
+            // 注意：这里删除了 jcenter 镜像，因为它非常不稳定且已过时
+            maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+            maven { url 'https://jitpack.io' }
+            maven { url "https://developer.huawei.com/repo/" }
+            maven { url "https://mvn.getui.com/nexus/content/repositories/releases/" }
+            maven { url 'https://developer.hihonor.com/repo/' }
+            google()
+            mavenCentral()
         }
     }
 }
