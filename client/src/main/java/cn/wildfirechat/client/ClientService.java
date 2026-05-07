@@ -4665,6 +4665,10 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         ProtoLogic.setJoinGroupRequestUpdateCallback(ClientService.this);
         Log.i(TAG, "Proto connect:" + userName);
         ProtoLogic.setAuthInfo(userName, userPwd);
+        if (!TextUtils.isEmpty(mHost)) {
+            ProtoLogic.setBackupAddress(mHost, 80);
+            ProtoLogic.setBackupAddressStrategy(2);
+        }
         return ProtoLogic.connect(mHost);
     }
 
